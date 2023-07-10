@@ -90,14 +90,14 @@ typealias Stack = [Card]
 extension Stack where Element == Card {
     func sortByRank() -> Self {
         var sortedHand = Stack()
-        var remainingCards = Self.self
+        var remainingCards = Self()
         
         for _ in 1 ... remainingCards.count {
             var highestCardIndex = 0
             for (i, _) in remainingCards.enumerated() {
                 if i + 1 < remainingCards.count {
-                    if remaining[i + 1].rank >
-                        remaning[highestCardIndex].rank ||
+                    if remainingCards[i + 1].rank >
+                        remainingCards[highestCardIndex].rank ||
                         (remainingCards[i + 1].rank == remainingCards[highestCardIndex].rank &&
                          remainingCards[i + 1].suit > remainingCards[highestCardIndex].suit) {
                         highestCardIndex = i + 1
@@ -105,7 +105,6 @@ extension Stack where Element == Card {
                 }
             }
         }
-        
         return sortedHand
     }
 }
