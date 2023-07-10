@@ -13,16 +13,24 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geo in
             VStack {
-                ForEach(tienLen.players) { player in
-                    if !player.playerIsMe {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum:90), spacing: -65)]) {
-                            ForEach(player.card) { card in
-                                CardView(cardName:card.filename)
-                            }
-                        }
-                        .frame(height: geo.size.height/6)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum:90), spacing: -65)]) {
+                    ForEach(tienLen.players[0].cards) { card in
+                        CardView(card:card)
                     }
                 }
+                        .frame(height: geo.size.height/6)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum:90), spacing: -65)]) {
+                    ForEach(tienLen.players[1].cards) { card in
+                        CardView(card:card)
+                    }
+                }
+                .frame(height: geo.size.height/6)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum:90), spacing: -65)]) {
+                    ForEach(tienLen.players[2].cards) { card in
+                        CardView(card:card)
+                    }
+                }
+                .frame(height: geo.size.height/6)
                 Rectangle()
                     .foregroundColor(Color.yellow)
                 let playerHand = tienLen.players[3].cards.filter {
@@ -31,13 +39,12 @@ struct ContentView: View {
                 let handType = "\(tienLen.evaluateHand(playerHand))"
                 Text(handType)
                     .font(.title)
-                let myPlayer = tienLen.players[3]
                 LazyVGrid(columns: [GridItem(.adaptive(minimum:90), spacing: -65)]) {
-                    ForEach(myPlayer.cards) { card in
+                    ForEach(tienLen.players[3].cards) { card in
                         CardView(card: card)
                             .offset(y: card.selected ? -30 : 0)
                             .onTapGesture {
-                                tienLen.select(card, in: myPlayer)
+                                tienLen.select(card, in: tienLen.players[3])
                             }
                     }
                 }
