@@ -11,6 +11,8 @@
 		03D0E2612A58785A00BB5717 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0E2602A58785A00BB5717 /* ContentView.swift */; };
 		03D0E2632A58785B00BB5717 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D0E2622A58785B00BB5717 /* Assets.xcassets */; };
 		03D0E2662A58785B00BB5717 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 03D0E2652A58785B00BB5717 /* Preview Assets.xcassets */; };
+		03D0E26F2A58919A00BB5717 /* TienLien.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0E26E2A58919A00BB5717 /* TienLien.swift */; };
+		03D0E2712A58C8FA00BB5717 /* TienLienGame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03D0E2702A58C8FA00BB5717 /* TienLienGame.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +21,8 @@
 		03D0E2602A58785A00BB5717 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		03D0E2622A58785B00BB5717 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		03D0E2652A58785B00BB5717 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		03D0E26E2A58919A00BB5717 /* TienLien.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TienLien.swift; sourceTree = "<group>"; };
+		03D0E2702A58C8FA00BB5717 /* TienLienGame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TienLienGame.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -52,8 +56,10 @@
 			isa = PBXGroup;
 			children = (
 				03D0E25E2A58785A00BB5717 /* TienLenApp.swift */,
+				03D0E2702A58C8FA00BB5717 /* TienLienGame.swift */,
 				03D0E2602A58785A00BB5717 /* ContentView.swift */,
 				03D0E2622A58785B00BB5717 /* Assets.xcassets */,
+				03D0E26E2A58919A00BB5717 /* TienLien.swift */,
 				03D0E2642A58785B00BB5717 /* Preview Content */,
 			);
 			path = TienLen;
@@ -138,7 +144,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				03D0E2612A58785A00BB5717 /* ContentView.swift in Sources */,
+				03D0E26F2A58919A00BB5717 /* TienLien.swift in Sources */,
 				03D0E25F2A58785A00BB5717 /* TienLenApp.swift in Sources */,
+				03D0E2712A58C8FA00BB5717 /* TienLienGame.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

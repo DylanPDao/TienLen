@@ -8,14 +8,52 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject var tienLen = TienLenGame()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        GeometryReader { geo in
+            VStack {
+                ForEach(tienLen.players) { player in
+                    if !player.playerIsMe {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum:90), spacing: -65)]) {
+                            ForEach(player.card) { card in
+                                CardView(cardName:card.filename)
+                            }
+                        }
+                        .frame(height: geo.size.height/6)
+                    }
+                }
+                Rectangle()
+                    .foregroundColor(Color.yellow)
+                let playerHand = tienLen.players[3].cards.filter {
+                    $0.selected == true
+                }
+                let handType = "\(tienLen.evaluateHand(playerHand))"
+                Text(handType)
+                    .font(.title)
+                let myPlayer = tienLen.players[3]
+                LazyVGrid(columns: [GridItem(.adaptive(minimum:90), spacing: -65)]) {
+                    ForEach(myPlayer.cards) { card in
+                        CardView(card: card)
+                            .offset(y: card.selected ? -30 : 0)
+                            .onTapGesture {
+                                tienLen.select(card, in: myPlayer)
+                            }
+                    }
+                }
+            }
         }
-        .padding()
+    }
+}
+
+struct CardView: View {
+    var card: Card
+    
+    var body: some View {
+        Image(card.filename)
+            .resizable()
+            .aspectRatio(2/3, contentMode: .fit)
+            .scaledToFit()
     }
 }
 
