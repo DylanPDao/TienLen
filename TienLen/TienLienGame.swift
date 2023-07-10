@@ -21,4 +21,8 @@ class TienLenGame: ObservableObject {
     func evaluateHand(_ cards: Stack) -> HandType {
         return HandType(cards)
     }
+    
+    func findStartingPlayer() -> Player {
+        return model.findStartingPlayer()
+    }
 }

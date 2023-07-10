@@ -42,6 +42,11 @@ struct ContentView: View {
                     }
                 }
             }
+            .onAppear() {
+                print("On Appear")
+                let playerWithLowCard = tienLen.findStartingPlayer()
+                print(playerWithLowCard.playerName)
+            }
         }
     }
 }

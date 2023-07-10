@@ -59,7 +59,7 @@ enum HandType {
                 if i + 1 < 5 {
                     if i == 0 && sortedHand[0].rank == .ace {
                         if ((sortedHand[i].rank.rawValue % 13) - (sortedHand[i + 1].rank.rawValue % 13)) != 1 &&
-                            ((sortedHand[i].rank.rawValue % 12) - (sortedHand[i].rank.rawValue % 12)) != 3 {
+                            ((sortedHand[i + 1].rank.rawValue % 12) - (sortedHand[i].rank.rawValue % 12)) != 3 {
                             isStraight = false
                         }
                     } else {
@@ -113,6 +113,8 @@ struct Player: Identifiable {
     var cards = Stack()
     var playerIsMe: Bool = false
     var id = UUID()
+    var activePlayer = false
+    var playerName = ""
 }
 
 struct Deck {
@@ -142,15 +144,29 @@ struct Deck {
 struct TienLen {
     private(set) var players: [Player]
     
+    private var activePlayer: Player {
+        var player = Player()
+        
+        if let activePlayerIndex = players.firstIndex(where: {$0.activePlayer == true}) {
+            player = players[activePlayerIndex]
+        } else {
+            if let humanIndex = players.firstIndex(where: {$0.playerIsMe == true}) {
+                player = players[humanIndex]
+            }
+        }
+        
+        return player
+    }
+    
     init() {
         let opponents = [
-            Player(),
-            Player(),
-            Player(),
+            Player(playerName: "Player 1"),
+            Player(playerName: "Player 2"),
+            Player(playerName: "Player 3"),
         ]
         
         players = opponents
-        players.append(Player(playerIsMe: true))
+        players.append(Player(playerIsMe: true, playerName: "Me"))
         
         var deck = Deck()
         deck.createFullDeck()
@@ -174,7 +190,27 @@ struct TienLen {
             }
         }
     }
-                                                    
+    
+    mutating func activatePlayer(_ player: Player) {
+        if let playerIndex = players.firstIndex(where: { $0.id == player.id }) {
+            players[playerIndex].activePlayer = true
+            
+            if !players[playerIndex].playerIsMe {
+                
+            }
+        }
+    }
+    
+    func findStartingPlayer() -> Player {
+        var startingPlayer: Player!
+            
+        for aPlayer in players {
+               if aPlayer.cards.contains(where: {$0.rank == .three && $0.suit == .clubs}) {
+                startingPlayer = aPlayer
+            }
+        }
+        return startingPlayer
+    }
 }
 
 
