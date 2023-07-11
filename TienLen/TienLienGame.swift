@@ -22,6 +22,10 @@ class TienLenGame: ObservableObject {
         return HandType(cards)
     }
     
+    func activatePlayer( _ player: Player) {
+        model.activatePlayer(player)
+    }
+    
     func findStartingPlayer() -> Player {
         return model.findStartingPlayer()
     }

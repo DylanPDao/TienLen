@@ -141,7 +141,14 @@ struct Deck {
     }
 }
 
+struct DiscardHand: Identifiable {
+    var hand: Stack
+    var handOwner: Player
+    var id = UUID()
+}
+
 struct TienLen {
+    private(set) var discardedHand = [DiscardHand]()
     private(set) var players: [Player]
     
     private var activePlayer: Player {
@@ -196,7 +203,7 @@ struct TienLen {
             players[playerIndex].activePlayer = true
             
             if !players[playerIndex].playerIsMe {
-                
+                let cpuHand = getCPUHand(of: activePlayer)
             }
         }
     }
@@ -211,6 +218,180 @@ struct TienLen {
         }
         return startingPlayer
     }
+    
+    func getCPUHand(of player: Player) -> Stack {
+        var pairExist = false, threeExist = false, fourExist = false, straightExist = false
+        var rankCount = [Rank: Int]()
+        var suitCount = [Suit: Int]()
+        
+        let playerCardsByRank = player.cards.sortByRank()
+        
+        for card in playerCardsByRank {
+            if rankCount[card.rank] != nil {
+                rankCount[card.rank]! += 1
+            } else {
+                rankCount[card.rank] = 1
+            }
+            
+            if suitCount[card.suit] != nil {
+                suitCount[card.suit]! += 1
+            } else {
+                suitCount[card.suit] = 1
+            }
+        }
+        
+        var cardsRankCount1 = 1
+        var cardsRankCount2 = 1
+        var thisRankCount = 0
+        
+        for rank in Rank.allCases {
+            if rankCount[rank] != nil {
+                thisRankCount = rankCount[rank]!
+            } else {
+                continue
+            }
+        
+        // check if there are ranks > 1
+        if thisRankCount > cardsRankCount1 {
+            if cardsRankCount1 != 1 {
+                cardsRankCount2 = cardsRankCount1
+            }
+            cardsRankCount1 = thisRankCount
+        } else if thisRankCount > cardsRankCount2 {
+            cardsRankCount2 = thisRankCount
+        }
+        
+            pairExist = cardsRankCount1 > 1
+            threeExist = cardsRankCount1 > 2
+            fourExist = cardsRankCount1 > 3
+            
+            if straightExist {
+                continue
+            } else {
+                straightExist = true
+            }
+            
+            for i in 0 ... 4 {
+                var rankRawValue = 1
+                
+                if rank <= Rank.ten {
+                    rankRawValue = rank.rawValue + i
+                } else if rank >= Rank.ace {
+                    rankRawValue = (rank.rawValue + i) % 13
+                    if rankRawValue == 0 {
+                        rankRawValue = 13
+                    }
+                }
+                
+                if rankCount[Rank(rawValue: rankRawValue)!] != nil {
+                    straightExist = straightExist && rankCount[Rank(rawValue: rankRawValue)!]! > 0
+                } else {
+                    straightExist = false
+                }
+            }
+        }
+        
+        // Singles
+        var validHands = combinations(player.cards, k: 1)
+        
+        // Pairs
+        if pairExist {
+            var possibleCombination = Stack()
+            for card in playerCardsByRank {
+                if rankCount[card.rank]! > 1 {
+                    possibleCombination.append(card)
+                }
+            }
+            let possibleHands = combinations(possibleCombination, k: 2)
+            
+            for i in 0 ..< possibleCombination.count {
+                if HandType(possibleHands[i]) != .Invalid {
+                    validHands.append(possibleHands[i])
+                }
+            }
+        }
+        
+        // Three of a kind
+        if threeExist {
+            var possibleCombination = Stack()
+            for card in playerCardsByRank {
+                if rankCount[card.rank]! > 1 {
+                    possibleCombination.append(card)
+                }
+            }
+            let possibleHands = combinations(possibleCombination, k: 3)
+            
+            for i in 0 ..< possibleCombination.count {
+                if HandType(possibleHands[i]) != .Invalid {
+                    validHands.append(possibleHands[i])
+                }
+            }
+        }
+        
+        // Four of a kind
+        if fourExist {
+            var possibleCombination = Stack()
+            for card in playerCardsByRank {
+                if (fourExist && rankCount[card.rank]! > 3) {
+                    possibleCombination.append(card)
+                }
+            }
+            let possibleHands = combinations(possibleCombination, k: 5)
+            
+            for i in 0 ..< possibleCombination.count {
+                if HandType(possibleHands[i]) != .Invalid {
+                    validHands.append(possibleHands[i])
+                }
+            }
+        }
+        
+        var returnHand = Stack()
+        for hand in validHands {
+            if let lastDiscardHand = discardedHand.last {
+                
+            } else {
+                if hand.contains(where: { $0.rank == Rank.three && $0.suit == Suit.clubs}) {
+                    returnHand = hand
+                }
+            }
+        }
+        return returnHand
+    }
+    
+    func combinations(_ cardArray: Stack, k: Int) -> [Stack] {
+        
+        var sub = [Stack]()
+        var ret = [Stack]()
+        var next = Stack()
+        
+        for i in 0 ..< cardArray.count {
+            if k == 1 {
+                var tempHand = Stack()
+                tempHand.append(cardArray[i])
+                ret.append(tempHand)
+            } else {
+                sub = combinations(sliceArray(cardArray, x1: i+1, x2: cardArray.count - 1), k: k-1)
+                
+                for subI in 0 ..< sub.count {
+                    next = sub[subI]
+                    next.append(cardArray[i])
+                    ret.append(next)
+                }
+            }
+        }
+        return ret
+    }
+        
+        func sliceArray(_ cardArray: Stack, x1: Int, x2: Int) -> Stack {
+            var sliced = Stack()
+            
+            if x1 <= x2 {
+                for i in x1 ... x2 {
+                    sliced.append(cardArray[i])
+                }
+            }
+            return sliced
+        }
 }
 
 

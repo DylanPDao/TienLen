@@ -52,6 +52,7 @@ struct ContentView: View {
             .onAppear() {
                 print("On Appear")
                 let playerWithLowCard = tienLen.findStartingPlayer()
+                tienLen.activatePlayer(playerWithLowCard)
                 print(playerWithLowCard.playerName)
             }
         }
